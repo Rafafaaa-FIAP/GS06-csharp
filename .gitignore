@@ -1,0 +1,64 @@
+# =========================
+# .NET
+# =========================
+bin/
+obj/
+out/
+
+# Visual Studio
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Rider / VS Code
+.idea/
+.vscode/
+
+# Logs
+*.log
+
+# NuGet
+packages/
+*.nupkg
+
+# =========================
+# Aspire / AppHost / Containers
+# =========================
+
+# Docker / containers
+.docker/
+docker-compose.override.yml
+
+# Aspire local state
+.aspire/
+
+# Container build cache
+**/container-cache/
+
+# =========================
+# User Secrets / Configuração local
+# =========================
+
+# appsettings locais
+appsettings.Development.json
+appsettings.Local.json
+
+# Secret Manager
+secrets.json
+
+# Env files
+.env
+.env.*
+
+# =========================
+# OS
+# =========================
+
+# Windows
+Thumbs.db
+Desktop.ini
+
+# Mac
+.DS_Store
