@@ -1,6 +1,13 @@
+using Aspire.Hosting;
+using Aspire.Hosting.ApplicationModel;
+
+
 var builder = DistributedApplication.CreateBuilder(args);
 
-var mysql = builder.AddMySql("mysql")
+var password = builder.AddParameter("mysql-password", "fiap", secret: true);
+
+var mysql = builder.AddMySql("mysql", password)
+    .WithLifetime(ContainerLifetime.Persistent)
     .AddDatabase("projetogsdb");
 
 var api = builder.AddProject<Projects.ProjetoGS_ApiService>("apiservice")
