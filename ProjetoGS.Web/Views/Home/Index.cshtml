@@ -1,8 +1,30 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Dashboard";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="container mt-4">
+
+    <h2>Dashboard</h2>
+
+    <hr />
+
+    <h4>Dados do usuário logado</h4>
+
+    <p>
+        <strong>Nome:</strong>
+        @User.Identity?.Name
+    </p>
+
+    <p>
+        <strong>Email:</strong>
+        @User.Claims.FirstOrDefault(c =>
+        c.Type == System.Security.Claims.ClaimTypes.Email)?.Value
+    </p>
+
+    <p>
+        <strong>Perfil:</strong>
+        @User.Claims.FirstOrDefault(c =>
+                c.Type == System.Security.Claims.ClaimTypes.Role)?.Value
+    </p>
+
 </div>

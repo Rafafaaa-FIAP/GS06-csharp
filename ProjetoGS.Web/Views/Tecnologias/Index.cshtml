@@ -1,0 +1,40 @@
+﻿@model List<ProjetoGS.Web.Models.TecnologiaViewModel>
+
+@{
+    ViewData["Title"] = "Tecnologias";
+}
+
+<div class="container mt-4">
+
+    <h2>Tecnologias</h2>
+
+    <table class="table table-striped">
+
+        <thead>
+            <tr>
+                <th>Nome</th>
+                <th>Descrição</th>
+                <th>Missão Origem</th>
+                <th>Categoria</th>
+                <th>Data Cadastro</th>
+            </tr>
+        </thead>
+
+        <tbody>
+
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.Nome</td>
+                    <td>@item.Descricao</td>
+                    <td>@item.MissaoOrigem</td>
+                    <td>@item.CategoriaImpacto?.Nome</td>
+                    <td>@item.DataCadastro.ToString("dd/MM/yyyy")</td>
+                </tr>
+            }
+
+        </tbody>
+
+    </table>
+
+</div>

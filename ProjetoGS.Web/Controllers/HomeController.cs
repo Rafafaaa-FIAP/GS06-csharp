@@ -1,9 +1,11 @@
 using Microsoft.AspNetCore.Mvc;
 using ProjetoGS.Web.Models;
 using System.Diagnostics;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ProjetoGS.Web.Controllers
 {
+    [Authorize]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;

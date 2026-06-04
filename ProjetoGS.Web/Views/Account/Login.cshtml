@@ -1,0 +1,51 @@
+﻿@model ProjetoGS.Web.Models.LoginViewModel
+
+@{
+    ViewData["Title"] = "Login";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-4">
+
+            <div class="card shadow">
+                <div class="card-header text-center">
+                    <h3>Projeto GS</h3>
+                </div>
+
+                <div class="card-body">
+
+                    @if (ViewBag.Erro != null)
+                    {
+                        <div class="alert alert-danger">
+                            @ViewBag.Erro
+                        </div>
+                    }
+
+                    <form asp-action="Login" method="post">
+
+                        <div class="mb-3">
+                            <label asp-for="Email" class="form-label"></label>
+                            <input asp-for="Email" class="form-control" />
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Senha" class="form-label"></label>
+                            <input asp-for="Senha"
+                                   type="password"
+                                   class="form-control" />
+                        </div>
+
+                        <button type="submit"
+                                class="btn btn-primary w-100">
+                            Entrar
+                        </button>
+
+                    </form>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

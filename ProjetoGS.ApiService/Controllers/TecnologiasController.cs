@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using ProjetoGS.ApiService.Interfaces;
 using ProjetoGS.ApiService.Models;
 
 namespace ProjetoGS.ApiService.Controllers;
 
+[Authorize]
 [ApiController]
 [Route("api/[controller]")]
 public class TecnologiasController : ControllerBase
