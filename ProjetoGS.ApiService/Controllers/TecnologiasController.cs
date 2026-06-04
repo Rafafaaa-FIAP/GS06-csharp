@@ -2,19 +2,25 @@
 using Microsoft.AspNetCore.Mvc;
 using ProjetoGS.ApiService.Interfaces;
 using ProjetoGS.ApiService.Models;
+using Microsoft.EntityFrameworkCore;
+using ProjetoGS.ApiService.Data;
+using ProjetoGS.ApiService.DTOs;
 
 namespace ProjetoGS.ApiService.Controllers;
 
-[Authorize]
 [ApiController]
 [Route("api/[controller]")]
 public class TecnologiasController : ControllerBase
 {
     private readonly ITecnologiaRepository _repository;
+    private readonly ApplicationDbContext _context;
 
-    public TecnologiasController(ITecnologiaRepository repository)
+    public TecnologiasController(
+        ITecnologiaRepository repository,
+        ApplicationDbContext context)
     {
         _repository = repository;
+        _context = context;
     }
 
     [HttpGet]
@@ -58,5 +64,58 @@ public class TecnologiasController : ControllerBase
     {
         await _repository.DeleteAsync(id);
         return NoContent();
+    }
+
+    [HttpGet("stats")]
+    public async Task<IActionResult> GetStats()
+    {
+        var totalTecnologias =
+            await _context.Tecnologias.CountAsync();
+
+        var missoesMapeadas =
+            await _context.Tecnologias
+                .Select(t => t.MissaoOrigem)
+                .Distinct()
+                .CountAsync();
+
+        var setoresBeneficiados =
+            await _context.CategoriasImpacto.CountAsync();
+
+        var tecnologiasPorCategoria =
+            await _context.Tecnologias
+                .Include(t => t.CategoriaImpacto)
+                .GroupBy(t => t.CategoriaImpacto!.Nome)
+                .Select(g => new TecnologiaPorCategoriaDto
+                {
+                    Categoria = g.Key,
+                    Total = g.Count()
+                })
+                .ToListAsync();
+
+        var ultimasTecnologias =
+            await _context.Tecnologias
+                .Include(t => t.CategoriaImpacto)
+                .OrderByDescending(t => t.DataCadastro)
+                .Take(5)
+                .Select(t => new UltimaTecnologiaDto
+                {
+                    Id = t.Id,
+                    Nome = t.Nome,
+                    MissaoOrigem = t.MissaoOrigem,
+                    Categoria = t.CategoriaImpacto!.Nome,
+                    DataCadastro = t.DataCadastro
+                })
+                .ToListAsync();
+
+        var dto = new TecnologiaStatsDto
+        {
+            TotalTecnologias = totalTecnologias,
+            MissoesMapeadas = missoesMapeadas,
+            SetoresBeneficiados = setoresBeneficiados,
+            TecnologiasPorCategoria = tecnologiasPorCategoria,
+            UltimasTecnologias = ultimasTecnologias
+        };
+
+        return Ok(dto);
     }
 }

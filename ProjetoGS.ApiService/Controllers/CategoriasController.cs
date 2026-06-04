@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using ProjetoGS.ApiService.Data;
+using ProjetoGS.ApiService.Interfaces;
 using ProjetoGS.ApiService.Models;
 
 namespace ProjetoGS.ApiService.Controllers;
@@ -8,25 +8,60 @@ namespace ProjetoGS.ApiService.Controllers;
 [Route("api/[controller]")]
 public class CategoriasController : ControllerBase
 {
-    private readonly ApplicationDbContext _context;
+    private readonly ICategoriaImpactoRepository _repository;
 
-    public CategoriasController(ApplicationDbContext context)
+    public CategoriasController(ICategoriaImpactoRepository repository)
     {
-        _context = context;
+        _repository = repository;
     }
 
     [HttpGet]
-    public IActionResult Get()
+    public async Task<IActionResult> Get()
     {
-        return Ok(_context.CategoriasImpacto.ToList());
+        var categorias = await _repository.GetAllAsync();
+        return Ok(categorias);
+    }
+
+    [HttpGet("{id}")]
+    public async Task<IActionResult> Get(int id)
+    {
+        var categoria = await _repository.GetByIdAsync(id);
+
+        if (categoria == null)
+            return NotFound();
+
+        return Ok(categoria);
     }
 
     [HttpPost]
-    public IActionResult Post(CategoriaImpacto categoria)
+    public async Task<IActionResult> Post(CategoriaImpacto categoria)
     {
-        _context.CategoriasImpacto.Add(categoria);
-        _context.SaveChanges();
+        await _repository.AddAsync(categoria);
 
-        return Ok(categoria);
+        return CreatedAtAction(
+            nameof(Get),
+            new { id = categoria.Id },
+            categoria);
+    }
+
+    [HttpPut("{id}")]
+    public async Task<IActionResult> Put(
+        int id,
+        CategoriaImpacto categoria)
+    {
+        if (id != categoria.Id)
+            return BadRequest();
+
+        await _repository.UpdateAsync(categoria);
+
+        return NoContent();
+    }
+
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> Delete(int id)
+    {
+        await _repository.DeleteAsync(id);
+
+        return NoContent();
     }
 }

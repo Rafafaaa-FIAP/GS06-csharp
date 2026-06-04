@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ProjetoGS.Web.Models;
+using System.Text;
 using System.Text.Json;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace ProjetoGS.Web.Controllers;
 
@@ -31,5 +33,76 @@ public class TecnologiasController : Controller
                 });
 
         return View(tecnologias);
+    }
+
+    [Authorize(Roles = "Administrador")]
+    [HttpGet]
+    public async Task<IActionResult> Create()
+    {
+        using var client = new HttpClient();
+
+        var response = await client.GetAsync(
+            "https://localhost:7368/api/Categorias");
+
+        if (!response.IsSuccessStatusCode)
+        {
+            return View(new CreateTecnologiaViewModel());
+        }
+
+        var json = await response.Content.ReadAsStringAsync();
+
+        var categorias =
+            JsonSerializer.Deserialize<List<CategoriaImpactoViewModel>>(
+                json,
+                new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true
+                });
+
+        var model = new CreateTecnologiaViewModel
+        {
+            Categorias = categorias!
+                .Select(c => new SelectListItem
+                {
+                    Value = c.Id.ToString(),
+                    Text = c.Nome
+                })
+                .ToList()
+        };
+
+        return View(model);
+    }
+
+    [Authorize(Roles = "Administrador")]
+    [HttpPost]
+    public async Task<IActionResult> Create(CreateTecnologiaViewModel model)
+    {
+        using var client = new HttpClient();
+
+        var request = new TecnologiaCreateRequest
+        {
+            Nome = model.Nome,
+            Descricao = model.Descricao,
+            MissaoOrigem = model.MissaoOrigem,
+            CategoriaImpactoId = model.CategoriaImpactoId
+        };
+
+        var json = JsonSerializer.Serialize(request);
+
+        var content = new StringContent(
+            json,
+            Encoding.UTF8,
+            "application/json");
+
+        var response = await client.PostAsync(
+            "https://localhost:7368/api/Tecnologias",
+            content);
+
+        if (response.IsSuccessStatusCode)
+        {
+            return RedirectToAction(nameof(Index));
+        }
+
+        return View(model);
     }
 }
