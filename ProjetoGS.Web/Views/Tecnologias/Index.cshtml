@@ -17,6 +17,7 @@
                 <th>Missão Origem</th>
                 <th>Categoria</th>
                 <th>Data Cadastro</th>
+                <th>Ações</th>
             </tr>
         </thead>
 
@@ -30,6 +31,22 @@
                     <td>@item.MissaoOrigem</td>
                     <td>@item.CategoriaImpacto?.Nome</td>
                     <td>@item.DataCadastro.ToString("dd/MM/yyyy")</td>
+                    <td>
+                        @if (User.IsInRole("Administrador"))
+                        {
+                            <a asp-action="Edit"
+                               asp-route-id="@item.Id"
+                               class="btn btn-sm btn-warning">
+                                Editar
+                            </a>
+
+                            <a asp-action="Delete"
+                               asp-route-id="@item.Id"
+                               class="btn btn-sm btn-danger">
+                                Excluir
+                            </a>
+                        }
+                    </td>
                 </tr>
             }
 

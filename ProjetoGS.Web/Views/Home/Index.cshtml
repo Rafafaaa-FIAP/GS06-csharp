@@ -1,30 +1,131 @@
-﻿@{
+﻿@model ProjetoGS.Web.Models.TecnologiaStatsViewModel
+
+@{
     ViewData["Title"] = "Dashboard";
+
+    var maiorValor = Model.TecnologiasPorCategoria.Any()
+        ? Model.TecnologiasPorCategoria.Max(x => x.Total)
+        : 1;
 }
 
 <div class="container mt-4">
 
-    <h2>Dashboard</h2>
+    <h2 class="mb-4">Dashboard - Nova Economia Espacial</h2>
 
-    <hr />
+    <div class="row mb-4">
 
-    <h4>Dados do usuário logado</h4>
+        <div class="col-md-4">
+            <div class="card shadow-sm border-primary">
+                <div class="card-body">
+                    <h5 class="card-title">Tecnologias</h5>
+                    <h2>@Model.TotalTecnologias</h2>
+                    <p class="text-muted">Tecnologias cadastradas</p>
+                </div>
+            </div>
+        </div>
 
-    <p>
-        <strong>Nome:</strong>
-        @User.Identity?.Name
-    </p>
+        <div class="col-md-4">
+            <div class="card shadow-sm border-success">
+                <div class="card-body">
+                    <h5 class="card-title">Missões Mapeadas</h5>
+                    <h2>@Model.MissoesMapeadas</h2>
+                    <p class="text-muted">Missões de origem diferentes</p>
+                </div>
+            </div>
+        </div>
 
-    <p>
-        <strong>Email:</strong>
-        @User.Claims.FirstOrDefault(c =>
-        c.Type == System.Security.Claims.ClaimTypes.Email)?.Value
-    </p>
+        <div class="col-md-4">
+            <div class="card shadow-sm border-warning">
+                <div class="card-body">
+                    <h5 class="card-title">Setores Beneficiados</h5>
+                    <h2>@Model.SetoresBeneficiados</h2>
+                    <p class="text-muted">Categorias de impacto</p>
+                </div>
+            </div>
+        </div>
 
-    <p>
-        <strong>Perfil:</strong>
-        @User.Claims.FirstOrDefault(c =>
-                c.Type == System.Security.Claims.ClaimTypes.Role)?.Value
-    </p>
+    </div>
+
+    <div class="row">
+
+        <div class="col-md-6">
+            <div class="card shadow-sm">
+                <div class="card-header">
+                    Impacto por Setor
+                </div>
+
+                <div class="card-body">
+
+                    @if (!Model.TecnologiasPorCategoria.Any())
+                    {
+                        <p class="text-muted">Nenhum dado disponível.</p>
+                    }
+                    else
+                    {
+                        @foreach (var item in Model.TecnologiasPorCategoria)
+                        {
+                            var porcentagem = (item.Total * 100) / maiorValor;
+
+                            <div class="mb-3">
+                                <div class="d-flex justify-content-between">
+                                    <strong>@item.Categoria</strong>
+                                    <span>@item.Total</span>
+                                </div>
+
+                                <div class="progress">
+                                    <div class="progress-bar"
+                                         role="progressbar"
+                                         style="width: @porcentagem%">
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    }
+
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card shadow-sm">
+                <div class="card-header">
+                    Últimos Cadastros
+                </div>
+
+                <div class="card-body">
+
+                    @if (!Model.UltimasTecnologias.Any())
+                    {
+                        <p class="text-muted">Nenhuma tecnologia cadastrada.</p>
+                    }
+                    else
+                    {
+                        <table class="table table-sm table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Nome</th>
+                                    <th>Missão</th>
+                                    <th>Categoria</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                @foreach (var item in Model.UltimasTecnologias)
+                                {
+                                    <tr>
+                                        <td>@item.Nome</td>
+                                        <td>@item.MissaoOrigem</td>
+                                        <td>@item.Categoria</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    }
+
+                </div>
+            </div>
+        </div>
+
+    </div>
 
 </div>
