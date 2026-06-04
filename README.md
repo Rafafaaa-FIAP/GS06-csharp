@@ -127,6 +127,57 @@ O Aspire iniciará automaticamente:
 
 ---
 
+# 📡 Documentação da API
+
+A API possui documentação interativa através do Swagger.
+
+Após executar o projeto, acesse:
+
+```text
+https://localhost:7368/swagger
+```
+
+No Swagger é possível:
+
+* Consultar os endpoints disponíveis
+* Visualizar os modelos de dados
+* Realizar testes das operações da API
+* Validar as respostas retornadas pelo sistema
+
+Principais endpoints:
+
+```text
+GET    /api/Tecnologias
+GET    /api/Tecnologias/{id}
+GET    /api/Tecnologias/stats
+POST   /api/Tecnologias
+PUT    /api/Tecnologias/{id}
+DELETE /api/Tecnologias/{id}
+```
+
+---
+
+# 🏗 Arquitetura da Solução
+
+A aplicação foi desenvolvida utilizando arquitetura em camadas:
+
+```text
+MVC (Frontend)
+↓
+Web API
+↓
+Repository Pattern
+↓
+Entity Framework Core
+↓
+MySQL
+```
+
+O .NET Aspire é utilizado para orquestrar a execução dos projetos da solução, permitindo a inicialização integrada da API e da aplicação MVC.
+
+
+---
+
 # 🔐 Usuários Disponíveis
 
 ## Administrador
