@@ -1,4 +1,5 @@
 ﻿@model ProjetoGS.Web.Models.TecnologiaStatsViewModel
+@using System.Security.Claims
 
 @{
     ViewData["Title"] = "Dashboard";
@@ -8,57 +9,288 @@
         : 1;
 }
 
-<div class="container mt-4">
+<style>
 
-    <h2 class="mb-4">Dashboard - Nova Economia Espacial</h2>
+    .dashboard-hero {
+        background: radial-gradient(circle at top right, rgba(237,20,91,.35), transparent 35%), linear-gradient(135deg,#050505,#111 50%,#250011);
+        border: 1px solid rgba(237,20,91,.25);
+        border-radius: 24px;
+        padding: 24px;
+        box-shadow: 0 15px 40px rgba(0,0,0,.4);
+    }
 
-    <div class="row mb-4">
+    .fiap-badge {
+        display: inline-block;
+        color: #ff8bb3;
+        border: 1px solid rgba(237,20,91,.4);
+        background: rgba(237,20,91,.08);
+        border-radius: 999px;
+        padding: 6px 14px;
+        font-size: .8rem;
+        font-weight: 800;
+    }
+
+    .dashboard-title {
+        font-size: 2rem;
+        font-weight: 900;
+        color: white;
+        margin-top: 16px;
+    }
+
+        .dashboard-title span {
+            color: #ed145b;
+        }
+
+    .dashboard-subtitle {
+        color: #c7c7c7;
+        max-width: 700px;
+    }
+
+    .btn-fiap {
+        background: #ed145b;
+        border: none;
+        color: white;
+        font-weight: 700;
+        border-radius: 12px;
+    }
+
+        .btn-fiap:hover {
+            background: #c8104c;
+            color: white;
+        }
+
+    .btn-dark-outline {
+        border: 1px solid #444;
+        color: white;
+        border-radius: 12px;
+    }
+
+        .btn-dark-outline:hover {
+            border-color: #ed145b;
+            color: #ed145b;
+        }
+
+    .metric-card,
+    .dashboard-card {
+        background: #151515;
+        border: 1px solid #2a2a2a;
+        border-radius: 22px;
+        overflow: hidden;
+        box-shadow: 0 10px 25px rgba(0,0,0,.25);
+    }
+
+    .metric-card {
+        position: relative;
+    }
+
+        .metric-card::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg,#ed145b,#ff7aa8);
+        }
+
+    .metric-icon {
+        width: 45px;
+        height: 45px;
+        border-radius: 12px;
+        background: rgba(237,20,91,.12);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 15px;
+    }
+
+    .metric-label {
+        color: #999;
+        text-transform: uppercase;
+        font-size: .75rem;
+        font-weight: 800;
+    }
+
+    .metric-value {
+        font-size: 2.2rem;
+        font-weight: 900;
+        color: white;
+    }
+
+    .metric-description {
+        color: #aaa;
+    }
+
+    .dashboard-card .card-header {
+        background: #111;
+        color: white;
+        border-bottom: 1px solid #2a2a2a;
+        font-weight: 800;
+    }
+
+    .dashboard-card .card-body {
+        background: #151515;
+        color: white;
+    }
+
+    .progress {
+        background: #2a2a2a;
+        height: 12px;
+        border-radius: 999px;
+    }
+
+    .progress-bar {
+        background: linear-gradient(90deg,#ed145b,#ff7aa8);
+    }
+
+    .category-pill {
+        background: rgba(237,20,91,.12);
+        border: 1px solid rgba(237,20,91,.3);
+        color: #ff8ab3;
+        border-radius: 999px;
+        padding: 4px 12px;
+        font-size: .8rem;
+    }
+
+    .table-responsive {
+        border-radius: 14px;
+        overflow: hidden;
+    }
+
+    .table {
+        color: white;
+        margin-bottom: 0;
+    }
+
+        .table thead {
+            background: #111;
+        }
+
+            .table thead th {
+                color: #999;
+                border-color: #2a2a2a;
+                background: #111;
+            }
+
+        .table tbody tr {
+            background: #151515;
+        }
+
+        .table tbody td {
+            color: #e6e6e6;
+            border-color: #2a2a2a;
+            background: #151515;
+        }
+
+        .table tbody tr:hover {
+            background: #1d1d1d;
+        }
+
+    .badge-fiap {
+        background: rgba(237,20,91,.12);
+        border: 1px solid rgba(237,20,91,.3);
+        color: #ff8ab3;
+        border-radius: 999px;
+        padding: 6px 12px;
+    }
+
+    .empty-box {
+        border: 1px dashed #333;
+        border-radius: 14px;
+        padding: 30px;
+        text-align: center;
+        color: #999;
+    }
+
+</style>
+
+<div class="container-fluid">
+
+    <section class="dashboard-hero mb-4">
+
+        <span class="fiap-badge">FIAP • Global Solution</span>
+
+        <h1 class="dashboard-title">
+            Nova Economia <span>Espacial</span>
+        </h1>
+
+        <p class="dashboard-subtitle">
+            Plataforma administrativa para catalogar, monitorar e visualizar tecnologias
+            derivadas da exploração espacial e seus impactos na sociedade.
+        </p>
+
+        <div class="d-flex flex-wrap gap-2 mt-4">
+            <a asp-controller="Tecnologias"
+               asp-action="Index"
+               class="btn btn-dark-outline">
+                Ver Tecnologias
+            </a>
+
+            @if (User.IsInRole("Administrador"))
+            {
+                <a asp-controller="Tecnologias"
+                   asp-action="Create"
+                   class="btn btn-fiap">
+                    Nova Tecnologia
+                </a>
+            }
+        </div>
+
+    </section>
+
+    <div class="row g-4 mb-4">
 
         <div class="col-md-4">
-            <div class="card shadow-sm border-primary">
-                <div class="card-body">
-                    <h5 class="card-title">Tecnologias</h5>
-                    <h2>@Model.TotalTecnologias</h2>
-                    <p class="text-muted">Tecnologias cadastradas</p>
+            <div class="metric-card">
+                <div class="card-body p-4">
+                    <div class="metric-icon">🚀</div>
+                    <div class="metric-label">Tecnologias</div>
+                    <div class="metric-value">@Model.TotalTecnologias</div>
+                    <p class="metric-description">Tecnologias cadastradas</p>
                 </div>
             </div>
         </div>
 
         <div class="col-md-4">
-            <div class="card shadow-sm border-success">
-                <div class="card-body">
-                    <h5 class="card-title">Missões Mapeadas</h5>
-                    <h2>@Model.MissoesMapeadas</h2>
-                    <p class="text-muted">Missões de origem diferentes</p>
+            <div class="metric-card">
+                <div class="card-body p-4">
+                    <div class="metric-icon">🛰️</div>
+                    <div class="metric-label">Missões Mapeadas</div>
+                    <div class="metric-value">@Model.MissoesMapeadas</div>
+                    <p class="metric-description">Missões espaciais diferentes</p>
                 </div>
             </div>
         </div>
 
         <div class="col-md-4">
-            <div class="card shadow-sm border-warning">
-                <div class="card-body">
-                    <h5 class="card-title">Setores Beneficiados</h5>
-                    <h2>@Model.SetoresBeneficiados</h2>
-                    <p class="text-muted">Categorias de impacto</p>
+            <div class="metric-card">
+                <div class="card-body p-4">
+                    <div class="metric-icon">🌎</div>
+                    <div class="metric-label">Setores Beneficiados</div>
+                    <div class="metric-value">@Model.SetoresBeneficiados</div>
+                    <p class="metric-description">Categorias de impacto social</p>
                 </div>
             </div>
         </div>
 
     </div>
 
-    <div class="row">
+    <div class="row g-4">
 
-        <div class="col-md-6">
-            <div class="card shadow-sm">
+        <div class="col-lg-5">
+            <div class="dashboard-card card">
+
                 <div class="card-header">
                     Impacto por Setor
                 </div>
 
-                <div class="card-body">
+                <div class="card-body p-4">
 
                     @if (!Model.TecnologiasPorCategoria.Any())
                     {
-                        <p class="text-muted">Nenhum dado disponível.</p>
+                        <div class="empty-box">
+                            Nenhum dado disponível.
+                        </div>
                     }
                     else
                     {
@@ -66,10 +298,10 @@
                         {
                             var porcentagem = (item.Total * 100) / maiorValor;
 
-                            <div class="mb-3">
-                                <div class="d-flex justify-content-between">
+                            <div class="mb-4">
+                                <div class="d-flex justify-content-between align-items-center mb-2">
                                     <strong>@item.Categoria</strong>
-                                    <span>@item.Total</span>
+                                    <span class="category-pill">@item.Total</span>
                                 </div>
 
                                 <div class="progress">
@@ -86,40 +318,61 @@
             </div>
         </div>
 
-        <div class="col-md-6">
-            <div class="card shadow-sm">
-                <div class="card-header">
-                    Últimos Cadastros
+        <div class="col-lg-7">
+            <div class="dashboard-card card">
+
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <span>Últimos Cadastros</span>
+
+                    <a asp-controller="Tecnologias"
+                       asp-action="Index"
+                       class="btn btn-sm btn-outline-light">
+                        Ver todos
+                    </a>
                 </div>
 
-                <div class="card-body">
+                <div class="card-body p-4">
 
                     @if (!Model.UltimasTecnologias.Any())
                     {
-                        <p class="text-muted">Nenhuma tecnologia cadastrada.</p>
+                        <div class="empty-box">
+                            Nenhuma tecnologia cadastrada.
+                        </div>
                     }
                     else
                     {
-                        <table class="table table-sm table-striped">
-                            <thead>
-                                <tr>
-                                    <th>Nome</th>
-                                    <th>Missão</th>
-                                    <th>Categoria</th>
-                                </tr>
-                            </thead>
-
-                            <tbody>
-                                @foreach (var item in Model.UltimasTecnologias)
-                                {
+                        <div class="table-responsive">
+                            <table class="table align-middle mb-0">
+                                <thead>
                                     <tr>
-                                        <td>@item.Nome</td>
-                                        <td>@item.MissaoOrigem</td>
-                                        <td>@item.Categoria</td>
+                                        <th>Nome</th>
+                                        <th>Missão</th>
+                                        <th>Categoria</th>
+                                        <th>Data</th>
                                     </tr>
-                                }
-                            </tbody>
-                        </table>
+                                </thead>
+
+                                <tbody>
+                                    @foreach (var item in Model.UltimasTecnologias)
+                                    {
+                                        <tr>
+                                            <td>
+                                                <strong>@item.Nome</strong>
+                                            </td>
+                                            <td>@item.MissaoOrigem</td>
+                                            <td>
+                                                <span class="badge-fiap">
+                                                    @item.Categoria
+                                                </span>
+                                            </td>
+                                            <td>
+                                                @item.DataCadastro.ToString("dd/MM/yyyy")
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
                     }
 
                 </div>
