@@ -4,54 +4,242 @@
     ViewData["Title"] = "Tecnologias";
 }
 
-<div class="container mt-4">
+<style>
 
-    <h2>Tecnologias</h2>
+    .page-header {
+        background: radial-gradient(circle at top right, rgba(237,20,91,.30), transparent 30%), linear-gradient(135deg,#050505,#151515,#250011);
+        border: 1px solid rgba(237,20,91,.25);
+        border-radius: 24px;
+        padding: 28px;
+        margin-bottom: 25px;
+    }
 
-    <table class="table table-striped">
+    .page-title {
+        color: white;
+        font-size: 2rem;
+        font-weight: 900;
+        margin-bottom: 6px;
+    }
 
-        <thead>
-            <tr>
-                <th>Nome</th>
-                <th>Descrição</th>
-                <th>Missão Origem</th>
-                <th>Categoria</th>
-                <th>Data Cadastro</th>
-                <th>Ações</th>
-            </tr>
-        </thead>
+        .page-title span {
+            color: #ed145b;
+        }
 
-        <tbody>
+    .page-subtitle {
+        color: #bdbdbd;
+        margin-bottom: 0;
+    }
 
-            @foreach (var item in Model)
+    .btn-fiap {
+        background: #ed145b;
+        border: none;
+        color: white;
+        font-weight: 700;
+        border-radius: 12px;
+    }
+
+        .btn-fiap:hover {
+            background: #c90f4c;
+            color: white;
+        }
+
+    .table-card {
+        background: #151515;
+        border: 1px solid #2a2a2a;
+        border-radius: 24px;
+        overflow: hidden;
+        box-shadow: 0 15px 35px rgba(0,0,0,.25);
+    }
+
+    .table-card-header {
+        padding: 20px 24px;
+        border-bottom: 1px solid #2a2a2a;
+        background: #111;
+        color: white;
+        font-weight: 800;
+    }
+
+    .table {
+        margin-bottom: 0;
+        color: white;
+    }
+
+        .table thead th {
+            background: #111;
+            color: #9d9d9d;
+            text-transform: uppercase;
+            font-size: .75rem;
+            letter-spacing: .8px;
+            border-color: #2a2a2a;
+            white-space: nowrap;
+        }
+
+        .table tbody td {
+            background: #151515;
+            color: #e6e6e6;
+            border-color: #2a2a2a;
+            vertical-align: middle;
+        }
+
+        .table tbody tr:hover td {
+            background: #1c1c1c;
+        }
+
+    .categoria-badge {
+        background: rgba(237,20,91,.12);
+        color: #ff8ab3;
+        border: 1px solid rgba(237,20,91,.30);
+        border-radius: 999px;
+        padding: 6px 12px;
+        font-size: .8rem;
+        font-weight: 700;
+    }
+
+    .descricao-cell {
+        max-width: 350px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .btn-action {
+        border-radius: 10px;
+        font-weight: 700;
+    }
+
+    .empty-state {
+        padding: 60px 20px;
+        text-align: center;
+        color: #999;
+    }
+
+</style>
+
+<div class="container-fluid">
+
+    <div class="page-header">
+
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+
+            <div>
+                <h1 class="page-title">
+                    Tecnologias <span>Espaciais</span>
+                </h1>
+
+                <p class="page-subtitle">
+                    Gerencie as tecnologias derivadas da exploração espacial.
+                </p>
+            </div>
+
+            @if (User.IsInRole("Administrador"))
             {
-                <tr>
-                    <td>@item.Nome</td>
-                    <td>@item.Descricao</td>
-                    <td>@item.MissaoOrigem</td>
-                    <td>@item.CategoriaImpacto?.Nome</td>
-                    <td>@item.DataCadastro.ToString("dd/MM/yyyy")</td>
-                    <td>
-                        @if (User.IsInRole("Administrador"))
-                        {
-                            <a asp-action="Edit"
-                               asp-route-id="@item.Id"
-                               class="btn btn-sm btn-warning">
-                                Editar
-                            </a>
-
-                            <a asp-action="Delete"
-                               asp-route-id="@item.Id"
-                               class="btn btn-sm btn-danger">
-                                Excluir
-                            </a>
-                        }
-                    </td>
-                </tr>
+                <a asp-action="Create"
+                   class="btn btn-fiap">
+                    + Nova Tecnologia
+                </a>
             }
 
-        </tbody>
+        </div>
 
-    </table>
+    </div>
+
+    <div class="table-card">
+
+        <div class="table-card-header">
+            Tecnologias Cadastradas (@Model.Count)
+        </div>
+
+        @if (!Model.Any())
+        {
+            <div class="empty-state">
+
+                <h4>Nenhuma tecnologia cadastrada</h4>
+
+                <p>
+                    Utilize o botão "Nova Tecnologia" para realizar o primeiro cadastro.
+                </p>
+
+            </div>
+        }
+        else
+        {
+            <div class="table-responsive">
+
+                <table class="table align-middle">
+
+                    <thead>
+                        <tr>
+                            <th>Nome</th>
+                            <th>Descrição</th>
+                            <th>Missão</th>
+                            <th>Categoria</th>
+                            <th>Cadastro</th>
+                            <th width="160">Ações</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+
+                                <td>
+                                    <strong>@item.Nome</strong>
+                                </td>
+
+                                <td class="descricao-cell"
+                                    title="@item.Descricao">
+                                    @item.Descricao
+                                </td>
+
+                                <td>
+                                    @item.MissaoOrigem
+                                </td>
+
+                                <td>
+                                    <span class="categoria-badge">
+                                        @item.CategoriaImpacto?.Nome
+                                    </span>
+                                </td>
+
+                                <td>
+                                    @item.DataCadastro.ToString("dd/MM/yyyy")
+                                </td>
+
+                                <td>
+
+                                    @if (User.IsInRole("Administrador"))
+                                    {
+                                        <div class="d-flex gap-2">
+
+                                            <a asp-action="Edit"
+                                               asp-route-id="@item.Id"
+                                               class="btn btn-warning btn-sm btn-action">
+                                                Editar
+                                            </a>
+
+                                            <a asp-action="Delete"
+                                               asp-route-id="@item.Id"
+                                               class="btn btn-danger btn-sm btn-action">
+                                                Excluir
+                                            </a>
+
+                                        </div>
+                                    }
+
+                                </td>
+
+                            </tr>
+                        }
+
+                    </tbody>
+
+                </table>
+
+            </div>
+        }
+
+    </div>
 
 </div>

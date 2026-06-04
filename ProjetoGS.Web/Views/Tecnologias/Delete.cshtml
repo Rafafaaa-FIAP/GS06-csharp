@@ -4,40 +4,198 @@
     ViewData["Title"] = "Excluir Tecnologia";
 }
 
-<div class="container mt-4">
+<style>
 
-    <div class="alert alert-danger">
+    .delete-header {
+        background: radial-gradient(circle at top right, rgba(220,53,69,.25), transparent 30%), linear-gradient(135deg,#050505,#151515,#2a0000);
+        border: 1px solid rgba(220,53,69,.25);
+        border-radius: 24px;
+        padding: 28px;
+        margin-bottom: 25px;
+    }
 
-        <h4>Confirma a exclusão?</h4>
+    .delete-title {
+        color: white;
+        font-size: 2rem;
+        font-weight: 900;
+        margin-bottom: 6px;
+    }
 
-        <hr />
+        .delete-title span {
+            color: #dc3545;
+        }
 
-        <p>
-            <strong>Nome:</strong>
-            @Model.Nome
-        </p>
+    .delete-subtitle {
+        color: #bdbdbd;
+        margin-bottom: 0;
+    }
 
-        <p>
-            <strong>Missão:</strong>
-            @Model.MissaoOrigem
+    .delete-card {
+        background: #151515;
+        border: 1px solid #2a2a2a;
+        border-radius: 24px;
+        overflow: hidden;
+        box-shadow: 0 15px 35px rgba(0,0,0,.25);
+    }
+
+    .delete-card-header {
+        background: #2a0000;
+        color: #ffb3b8;
+        padding: 20px 24px;
+        border-bottom: 1px solid rgba(220,53,69,.25);
+        font-weight: 800;
+    }
+
+    .delete-card-body {
+        padding: 30px;
+    }
+
+    .info-card {
+        background: #101010;
+        border: 1px solid #2a2a2a;
+        border-radius: 16px;
+        padding: 20px;
+        margin-bottom: 25px;
+    }
+
+    .info-label {
+        color: #999;
+        font-size: .8rem;
+        text-transform: uppercase;
+        font-weight: 800;
+        letter-spacing: .8px;
+        margin-bottom: 4px;
+    }
+
+    .info-value {
+        color: white;
+        font-size: 1.05rem;
+        font-weight: 600;
+    }
+
+    .warning-box {
+        background: rgba(220,53,69,.08);
+        border: 1px solid rgba(220,53,69,.25);
+        color: #ffb3b8;
+        border-radius: 16px;
+        padding: 18px;
+        margin-bottom: 25px;
+    }
+
+    .btn-delete {
+        background: #dc3545;
+        border: none;
+        color: white;
+        font-weight: 700;
+        border-radius: 12px;
+        padding: 10px 20px;
+    }
+
+        .btn-delete:hover {
+            background: #bb2d3b;
+            color: white;
+        }
+
+    .btn-cancel {
+        border: 1px solid #444;
+        color: white;
+        border-radius: 12px;
+        padding: 10px 20px;
+    }
+
+        .btn-cancel:hover {
+            border-color: #ed145b;
+            color: #ed145b;
+        }
+
+</style>
+
+<div class="container-fluid">
+
+    <div class="delete-header">
+
+        <h1 class="delete-title">
+            Excluir <span>Tecnologia</span>
+        </h1>
+
+        <p class="delete-subtitle">
+            Esta ação não poderá ser desfeita.
         </p>
 
     </div>
 
-    <form asp-action="Delete">
+    <div class="delete-card">
 
-        <input type="hidden" asp-for="Id" />
+        <div class="delete-card-header">
+            Confirmação de Exclusão
+        </div>
 
-        <button type="submit"
-                class="btn btn-danger">
-            Excluir
-        </button>
+        <div class="delete-card-body">
 
-        <a asp-action="Index"
-           class="btn btn-secondary">
-            Cancelar
-        </a>
+            <div class="warning-box">
 
-    </form>
+                <strong>⚠ Atenção!</strong>
+
+                <div class="mt-2">
+                    Você está prestes a remover permanentemente esta tecnologia do sistema.
+                </div>
+
+            </div>
+
+            <div class="info-card">
+
+                <div class="row">
+
+                    <div class="col-md-6 mb-3">
+
+                        <div class="info-label">
+                            Nome da Tecnologia
+                        </div>
+
+                        <div class="info-value">
+                            @Model.Nome
+                        </div>
+
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+
+                        <div class="info-label">
+                            Missão de Origem
+                        </div>
+
+                        <div class="info-value">
+                            @Model.MissaoOrigem
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <form asp-action="Delete">
+
+                <input type="hidden" asp-for="Id" />
+
+                <div class="d-flex gap-2">
+
+                    <button type="submit"
+                            class="btn btn-delete">
+                        Excluir Tecnologia
+                    </button>
+
+                    <a asp-action="Index"
+                       class="btn btn-cancel">
+                        Cancelar
+                    </a>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
 
 </div>

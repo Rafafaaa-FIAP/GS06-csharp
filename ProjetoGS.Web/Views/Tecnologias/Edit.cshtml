@@ -4,46 +4,199 @@
     ViewData["Title"] = "Editar Tecnologia";
 }
 
-<div class="container mt-4">
+<style>
 
-    <h2>Editar Tecnologia</h2>
+    .form-header {
+        background: radial-gradient(circle at top right, rgba(237,20,91,.30), transparent 30%), linear-gradient(135deg,#050505,#151515,#250011);
+        border: 1px solid rgba(237,20,91,.25);
+        border-radius: 24px;
+        padding: 28px;
+        margin-bottom: 25px;
+    }
 
-    <form method="post">
+    .form-title {
+        color: white;
+        font-size: 2rem;
+        font-weight: 900;
+        margin-bottom: 6px;
+    }
 
-        <input type="hidden" asp-for="Id" />
+        .form-title span {
+            color: #ed145b;
+        }
 
-        <div class="mb-3">
-            <label asp-for="Nome" class="form-label"></label>
-            <input asp-for="Nome" class="form-control" />
+    .form-subtitle {
+        color: #bdbdbd;
+        margin-bottom: 0;
+    }
+
+    .form-card {
+        background: #151515;
+        border: 1px solid #2a2a2a;
+        border-radius: 24px;
+        overflow: hidden;
+        box-shadow: 0 15px 35px rgba(0,0,0,.25);
+    }
+
+    .form-card-header {
+        background: #111;
+        color: white;
+        padding: 20px 24px;
+        border-bottom: 1px solid #2a2a2a;
+        font-weight: 800;
+    }
+
+    .form-card-body {
+        padding: 30px;
+    }
+
+    .form-label {
+        color: #e6e6e6;
+        font-weight: 700;
+        margin-bottom: 8px;
+    }
+
+    .form-control,
+    .form-select {
+        background: #101010;
+        border: 1px solid #2f2f2f;
+        color: white;
+        border-radius: 12px;
+        padding: 12px;
+    }
+
+        .form-control:focus,
+        .form-select:focus {
+            background: #101010;
+            color: white;
+            border-color: #ed145b;
+            box-shadow: 0 0 0 .2rem rgba(237,20,91,.15);
+        }
+
+    textarea.form-control {
+        min-height: 130px;
+        resize: vertical;
+    }
+
+    .btn-fiap {
+        background: #ed145b;
+        border: none;
+        color: white;
+        font-weight: 700;
+        border-radius: 12px;
+        padding: 10px 20px;
+    }
+
+        .btn-fiap:hover {
+            background: #c90f4c;
+            color: white;
+        }
+
+    .btn-dark-outline {
+        border: 1px solid #444;
+        color: white;
+        border-radius: 12px;
+        padding: 10px 20px;
+    }
+
+        .btn-dark-outline:hover {
+            border-color: #ed145b;
+            color: #ed145b;
+        }
+
+</style>
+
+<div class="container-fluid">
+
+    <div class="form-header">
+
+        <h1 class="form-title">
+            Editar <span>Tecnologia</span>
+        </h1>
+
+        <p class="form-subtitle">
+            Atualize as informações da tecnologia selecionada.
+        </p>
+
+    </div>
+
+    <div class="form-card">
+
+        <div class="form-card-header">
+            Edição de Tecnologia
         </div>
 
-        <div class="mb-3">
-            <label asp-for="Descricao" class="form-label"></label>
-            <textarea asp-for="Descricao"
-                      class="form-control"></textarea>
+        <div class="form-card-body">
+
+            <form method="post">
+
+                <input type="hidden" asp-for="Id" />
+
+                <div class="mb-4">
+
+                    <label asp-for="Nome"
+                           class="form-label">
+                    </label>
+
+                    <input asp-for="Nome"
+                           class="form-control" />
+
+                </div>
+
+                <div class="mb-4">
+
+                    <label asp-for="Descricao"
+                           class="form-label">
+                    </label>
+
+                    <textarea asp-for="Descricao"
+                              class="form-control">
+                </textarea>
+
+                </div>
+
+                <div class="mb-4">
+
+                    <label asp-for="MissaoOrigem"
+                           class="form-label">
+                    </label>
+
+                    <input asp-for="MissaoOrigem"
+                           class="form-control" />
+
+                </div>
+
+                <div class="mb-4">
+
+                    <label asp-for="CategoriaImpactoId"
+                           class="form-label">
+                    </label>
+
+                    <select asp-for="CategoriaImpactoId"
+                            asp-items="Model.Categorias"
+                            class="form-select">
+                    </select>
+
+                </div>
+
+                <div class="d-flex gap-2">
+
+                    <button type="submit"
+                            class="btn btn-fiap">
+                        Salvar Alterações
+                    </button>
+
+                    <a asp-action="Index"
+                       class="btn btn-dark-outline">
+                        Voltar
+                    </a>
+
+                </div>
+
+            </form>
+
         </div>
 
-        <div class="mb-3">
-            <label asp-for="MissaoOrigem" class="form-label"></label>
-            <input asp-for="MissaoOrigem" class="form-control" />
-        </div>
-
-        <div class="mb-3">
-            <label asp-for="CategoriaImpactoId" class="form-label"></label>
-            <select asp-for="CategoriaImpactoId"
-                    asp-items="Model.Categorias"
-                    class="form-select">
-            </select>
-        </div>
-
-        <button type="submit" class="btn btn-warning">
-            Salvar Alterações
-        </button>
-
-        <a asp-action="Index" class="btn btn-secondary">
-            Voltar
-        </a>
-
-    </form>
+    </div>
 
 </div>
