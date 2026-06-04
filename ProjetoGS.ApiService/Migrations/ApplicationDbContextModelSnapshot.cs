@@ -88,9 +88,8 @@ namespace ProjetoGS.ApiService.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<string>("Perfil")
-                        .IsRequired()
-                        .HasColumnType("longtext");
+                    b.Property<int>("Perfil")
+                        .HasColumnType("int");
 
                     b.Property<string>("SenhaHash")
                         .IsRequired()

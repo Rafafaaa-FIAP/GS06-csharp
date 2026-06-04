@@ -8,6 +8,7 @@ var password = builder.AddParameter("mysql-password", "fiap", secret: true);
 
 var mysql = builder.AddMySql("mysql", password)
     .WithLifetime(ContainerLifetime.Persistent)
+    .WithDataVolume("projetogs-mysql-data")
     .AddDatabase("projetogsdb");
 
 var api = builder.AddProject<Projects.ProjetoGS_ApiService>("apiservice")

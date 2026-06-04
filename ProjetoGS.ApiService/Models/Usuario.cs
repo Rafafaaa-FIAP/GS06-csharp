@@ -10,5 +10,5 @@ public class Usuario
 
     public string SenhaHash { get; set; } = string.Empty;
 
-    public string Perfil { get; set; } = string.Empty;
+    public PerfilUsuario Perfil { get; set; }
 }
